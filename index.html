@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métricas de Crecimiento y Nutrición Óptima — Trucha Arcoíris</title>
+
+  <!-- Fuentes externas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ================================================
+       VARIABLES DE DISEÑO
+       ================================================ */
+    :root {
+      --cobalt: #0047AB;
+      --cobalt-dark: #003080;
+      --cobalt-deep: #001d4d;
+      --orange: #FF8C00;
+      --orange-light: #FFB347;
+      --emerald: #50C878;
+      --emerald-dark: #3AA062;
+      --coral: #FF4040;
+      --coral-light: #FF7070;
+      --graphite: #36454F;
+      --graphite-light: #5A6B76;
+
+      --bg-page: #F0F2F5;
+      --bg-section: #FFFFFF;
+      --bg-dark: #1A2233;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --text-xs: 0.6875rem;
+      --text-sm: 0.8125rem;
+      --text-base: 0.9375rem;
+      --text-lg: 1.125rem;
+      --text-xl: 1.5rem;
+      --text-2xl: 2rem;
+      --text-3xl: 2.75rem;
+      --text-highlight: 1.75rem;
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --duration-fast: 0.25s;
+      --duration-base: 0.4s;
+      --duration-slow: 0.6s;
+    }
+
+    /* ================================================
+       RESET Y BASE
+       ================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      color: var(--graphite);
+      background: var(--bg-page);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--orange);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--duration-fast) var(--ease-smooth);
+    }
+    a:hover { border-bottom-color: var(--orange); }
+
+    /* ================================================
+       HERO / CABECERA
+       ================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-2xl) var(--space-lg);
+      background: linear-gradient(170deg, var(--cobalt-deep) 0%, var(--cobalt-dark) 40%, var(--cobalt) 100%);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Textura de ondas de agua en el fondo */
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 180'%3E%3Cpath fill='%23F0F2F5' d='M0,100 C360,180 720,20 1080,100 C1260,140 1380,80 1440,100 L1440,180 L0,180 Z'/%3E%3C/svg%3E") no-repeat bottom center;
+      background-size: cover;
+      z-index: 2;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,140,0,0.07) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      background: rgba(255,255,255,0.08);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      margin-bottom: var(--space-lg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--emerald);
+      animation: badge-pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes badge-pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(80,200,120,0.5); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(80,200,120,0); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      font-weight: 800;
+      line-height: 1.2;
+      max-width: 700px;
+      margin-bottom: var(--space-md);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-species {
+      font-size: var(--text-lg);
+      font-style: italic;
+      opacity: 0.85;
+      margin-bottom: var(--space-xs);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-meta {
+      font-size: var(--text-sm);
+      opacity: 0.55;
+      margin-bottom: var(--space-xl);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      position: relative;
+      z-index: 1;
+      opacity: 0.6;
+      font-size: var(--text-xs);
+      letter-spacing: 0.05em;
+    }
+
+    .hero-cta .scroll-arrow {
+      width: 24px;
+      height: 38px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .hero-cta .scroll-arrow::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 8px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 2px;
+      animation: scroll-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-bounce {
+      0%, 100% { top: 6px; opacity: 1; }
+      50% { top: 18px; opacity: 0.3; }
+    }
+
+    /* Silueta decorativa de trucha */
+    .hero-fish {
+      position: absolute;
+      bottom: 160px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.04;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ================================================
+       LÍNEA DE TIEMPO CENTRAL
+       ================================================ */
+    .infographic-body {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-3xl) var(--space-lg);
+    }
+
+    /* Línea vertical de la timeline */
+    .timeline-line {
+      position: absolute;
+      left: 28px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0,71,171,0.12) 5%,
+        rgba(0,71,171,0.12) 95%,
+        transparent 100%
+      );
+    }
+
+    /* Puntos de la timeline */
+    .timeline-dot {
+      position: absolute;
+      left: 20px;
+      top: 32px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 3px solid var(--bg-page);
+      z-index: 2;
+      transition:
+        transform var(--duration-base) var(--ease-out),
+        box-shadow var(--duration-base) var(--ease-out);
+    }
+
+    .timeline-dot--blue   { background: var(--cobalt); }
+    .timeline-dot--orange { background: var(--orange); }
+    .timeline-dot--green  { background: var(--emerald); }
+    .timeline-dot--red    { background: var(--coral); }
+
+    .section-block.active .timeline-dot {
+      transform: scale(1.4);
+      box-shadow: 0 0 0 6px rgba(0,71,171,0.1);
+    }
+
+    /* ================================================
+       SECCIONES (BLOQUES DE LA INFOGRAFÍA)
+       ================================================ */
+    .section-block {
+      position: relative;
+      margin-left: 56px;
+      margin-bottom: var(--space-2xl);
+      opacity: 0;
+      transform: translateY(40px);
+      transition:
+        opacity var(--duration-slow) var(--ease-out),
+        transform var(--duration-slow) var(--ease-out);
+    }
+
+    .section-block.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Número de sección */
+    .section-number {
+      font-family: var(--font-display);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-xs);
+      transition: color var(--duration-base) var(--ease-smooth);
+    }
+
+    .section-number--blue   { color: rgba(0,71,171,0.35); }
+    .section-number--orange { color: rgba(255,140,0,0.35); }
+    .section-number--green  { color: rgba(80,200,120,0.35); }
+    .section-number--red    { color: rgba(255,64,64,0.35); }
+
+    .section-block.active .section-number--blue   { color: var(--cobalt); }
+    .section-block.active .section-number--orange { color: var(--orange); }
+    .section-block.active .section-number--green  { color: var(--emerald); }
+    .section-block.active .section-number--red    { color: var(--coral); }
+
+    /* Título de sección */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--graphite);
+      line-height: 1.25;
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Etiqueta / categoría */
+    .section-tag {
+      display: inline-block;
+      font-size: var(--text-xs);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--graphite-light);
+      background: rgba(54,69,79,0.05);
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: var(--space-md);
+    }
+
+    /* ================================================
+       TARJETA INTERACTIVA DENTRO DE CADA SECCIÓN
+       ================================================ */
+    .section-card {
+      background: var(--bg-section);
+      border: 1px solid rgba(54,69,79,0.06);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 1px 4px rgba(54,69,79,0.04), 0 4px 16px rgba(54,69,79,0.03);
+      cursor: pointer;
+      overflow: hidden;
+      transition:
+        transform var(--duration-base) var(--ease-out),
+        box-shadow var(--duration-base) var(--ease-out),
+        border-color var(--duration-base) var(--ease-out);
+      position: relative;
+    }
+
+    .section-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,71,171,0.08), 0 2px 8px rgba(54,69,79,0.04);
+      border-color: rgba(0,71,171,0.1);
+    }
+
+    .section-card:focus-visible {
+      outline: 2px solid var(--cobalt);
+      outline-offset: 3px;
+    }
+
+    /* Frente de la tarjeta (estado limpio) */
+    .card-face {
+      padding: var(--space-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      min-height: 120px;
+      transition:
+        opacity var(--duration-slow) var(--ease-smooth),
+        transform var(--duration-slow) var(--ease-smooth);
+    }
+
+    .section-card.open .card-face {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.98);
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .card-face-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+
+    .section-card:hover .card-face-icon {
+      transform: scale(1.08);
+    }
+
+    .card-face-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .icon-blue   { color: var(--cobalt);   background: rgba(0,71,171,0.07); }
+    .icon-orange { color: var(--orange);   background: rgba(255,140,0,0.07); }
+    .icon-green  { color: var(--emerald);  background: rgba(80,200,120,0.07); }
+    .icon-red    { color: var(--coral);    background: rgba(255,64,64,0.07); }
+
+    .card-face-text h4 {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--graphite);
+      line-height: 1.3;
+    }
+
+    .card-face-text p {
+      font-size: var(--text-sm);
+      color: var(--graphite-light);
+      margin-top: 2px;
+    }
+
+    .card-face-arrow {
+      margin-left: auto;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(54,69,79,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition:
+        background var(--duration-base) var(--ease-smooth),
+        transform var(--duration-base) var(--ease-smooth);
+    }
+
+    .section-card:hover .card-face-arrow {
+      background: rgba(0,71,171,0.08);
+      transform: translateX(3px);
+    }
+
+    .card-face-arrow svg {
+      width: 16px;
+      height: 16px;
+      color: var(--graphite-light);
+    }
+
+    /* ================================================
+       CONTENIDO REVELADO (sombra interior)
+       ================================================ */
+    .card-depth {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition:
+        opacity var(--duration-slow) var(--ease-smooth),
+        max-height var(--duration-slow) var(--ease-smooth),
+        padding var(--duration-slow) var(--ease-smooth);
+      padding: 0 var(--space-xl);
+    }
+
+    .section-card.open .card-depth {
+      opacity: 1;
+      max-height: 600px;
+      pointer-events: auto;
+      padding: var(--space-xl);
+
+      /* Efecto #39: sombra interior como marco de profundidad */
+      box-shadow:
+        inset 0 3px 12px rgba(0,71,171,0.05),
+        inset 0 -2px 6px rgba(54,69,79,0.02);
+      border-top: 1px solid rgba(0,71,171,0.06);
+    }
+
+    .depth-layout {
+      display: flex;
+      gap: var(--space-xl);
+      align-items: flex-start;
+    }
+
+    .depth-visual {
+      flex-shrink: 0;
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .depth-visual svg {
+      width: 100%;
+      height: auto;
+      max-width: 200px;
+    }
+
+    .depth-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .depth-stat {
+      font-family: var(--font-display);
+      font-size: var(--text-highlight);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: var(--space-sm);
+    }
+
+    .stat-blue   { color: var(--cobalt); }
+    .stat-orange { color: var(--orange); }
+    .stat-green  { color: var(--emerald); }
+    .stat-red    { color: var(--coral); }
+
+    .depth-desc {
+      font-size: var(--text-sm);
+      color: var(--graphite-light);
+      line-height: 1.6;
+      margin-bottom: var(--space-md);
+    }
+
+    .depth-legend {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm) var(--space-md);
+    }
+
+    .depth-legend li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--text-xs);
+      color: var(--graphite);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Botón cerrar */
+    .depth-close {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: none;
+      border: 1px solid rgba(54,69,79,0.12);
+      border-radius: var(--radius-sm);
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      color: var(--graphite-light);
+      cursor: pointer;
+      margin-top: var(--space-md);
+      transition:
+        background var(--duration-fast) var(--ease-smooth),
+        border-color var(--duration-fast) var(--ease-smooth);
+    }
+
+    .depth-close:hover {
+      background: rgba(54,69,79,0.05);
+      border-color: rgba(54,69,79,0.2);
+    }
+
+    .depth-close svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* ================================================
+       TABLA COMPARATIVA (Sección 8)
+       ================================================ */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-xs);
+      margin-top: var(--space-sm);
+    }
+
+    .compare-table thead th {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.625rem;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 2px solid rgba(54,69,79,0.08);
+      text-align: left;
+      color: var(--graphite);
+    }
+
+    .compare-table thead th:nth-child(2) { color: var(--emerald); }
+    .compare-table thead th:nth-child(3) { color: var(--coral); }
+
+    .compare-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid rgba(54,69,79,0.04);
+      color: var(--graphite);
+    }
+
+    .val-pos { color: var(--emerald); font-weight: 600; }
+    .val-neg { color: var(--coral);   font-weight: 600; }
+
+    .table-note {
+      font-size: var(--text-xs);
+      color: rgba(54,69,79,0.5);
+      font-style: italic;
+      margin-top: var(--space-sm);
+      line-height: 1.5;
+    }
+
+    /* ================================================
+       SEPARADORES ENTRE BLOQUES TEMÁTICOS
+       ================================================ */
+    .theme-divider {
+      margin-left: 56px;
+      margin-bottom: var(--space-2xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .theme-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(0,71,171,0.15), transparent);
+    }
+
+    .theme-divider-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(0,71,171,0.35);
+      white-space: nowrap;
+    }
+
+    /* ================================================
+       PIE DE PÁGINA
+       ================================================ */
+    .infographic-footer {
+      background: var(--bg-dark);
+      color: rgba(255,255,255,0.6);
+      padding: var(--space-2xl) var(--space-lg);
+      text-align: center;
+      margin-top: var(--space-3xl);
+      position: relative;
+    }
+
+    .infographic-footer::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath fill='%231A2233' d='M0,0 L1440,0 L1440,20 C1080,60 720,0 360,30 C180,45 60,20 0,35 Z'/%3E%3C/svg%3E") no-repeat bottom center;
+      background-size: cover;
+    }
+
+    .footer-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-source {
+      font-size: var(--text-sm);
+      line-height: 1.7;
+    }
+
+    .footer-source a {
+      color: var(--orange-light);
+    }
+
+    .footer-author {
+      font-size: var(--text-base);
+      color: rgba(255,255,255,0.4);
+      margin-top: var(--space-sm);
+    }
+
+    .footer-author strong {
+      color: rgba(255,255,255,0.8);
+      font-weight: 600;
+    }
+
+    .footer-line {
+      width: 40px;
+      height: 2px;
+      background: var(--orange);
+      margin: var(--space-md) auto 0;
+      border-radius: 1px;
+    }
+
+    /* ================================================
+       RESPONSIVE: TABLET
+       ================================================ */
+    @media (min-width: 640px) {
+      .hero-title { font-size: var(--text-3xl); }
+      .hero-species { font-size: var(--text-xl); }
+
+      .depth-layout { flex-direction: row; }
+      .depth-visual { width: 220px; }
+
+      .section-title { font-size: var(--text-xl); }
+    }
+
+    /* ================================================
+       RESPONSIVE: DESKTOP
+       ================================================ */
+    @media (min-width: 1024px) {
+      .hero { padding: var(--space-3xl) var(--space-2xl); }
+
+      .infographic-body { padding: var(--space-3xl) var(--space-2xl); }
+      .timeline-line { left: 32px; }
+      .timeline-dot { left: 24px; top: 36px; }
+      .section-block { margin-left: 72px; margin-bottom: var(--space-2xl); }
+      .theme-divider { margin-left: 72px; }
+
+      .card-face { padding: var(--space-xl) var(--space-2xl); }
+      .card-depth { padding: 0 var(--space-2xl); }
+      .section-card.open .card-depth { padding: var(--space-2xl); }
+
+      .depth-visual { width: 260px; }
+    }
+
+    /* ================================================
+       ACCESIBILIDAD: reduced-motion
+       ================================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.05ms !important;
+      }
+      .section-block { opacity: 1; transform: none; }
+    }
+
+    /* ================================================
+       UTILIDADES
+       ================================================ */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======================================================
+       HERO — Cabecera de la infografía
+       ====================================================== -->
+  <header class="hero" role="banner">
+    <!-- Silueta decorativa de trucha -->
+    <svg class="hero-fish" width="600" height="200" viewBox="0 0 600 200" fill="none">
+      <path d="M80 100 C120 40, 280 20, 400 60 C460 80, 500 100, 520 100 C500 100, 460 120, 400 140 C280 180, 120 160, 80 100Z" fill="white"/>
+      <circle cx="150" cy="88" r="8" fill="#1A2233"/>
+    </svg>
+
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span>Infografía Interactiva</span>
+    </div>
+
+    <h1 class="hero-title">Métricas de Crecimiento y Nutrición Óptima en la Trucha Arcoíris</h1>
+
+    <p class="hero-species"><em>Oncorhynchus mykiss</em></p>
+
+    <p class="hero-meta">Universidad Tecnológica del Perú &middot; UTP &middot; Sección 37662</p>
+
+    <div class="hero-cta" aria-hidden="true">
+      <div class="scroll-arrow"></div>
+      <span>Desplaza y toca para explorar</span>
+    </div>
+  </header>
+
+
+  <!-- ======================================================
+       CUERPO DE LA INFOGRAFÍA — Línea de tiempo con 10 secciones
+       ====================================================== -->
+  <main class="infographic-body" role="main">
+
+    <!-- Línea vertical de la timeline -->
+    <div class="timeline-line" aria-hidden="true"></div>
+
+
+    <!-- ———————————————— SEPARADOR TEMÁTICO ———————————————— -->
+    <div class="theme-divider" aria-hidden="true">
+      <div class="theme-divider-line"></div>
+      <span class="theme-divider-label">Contexto y Biología</span>
+      <div class="theme-divider-line" style="background:linear-gradient(to left, rgba(0,71,171,0.15), transparent)"></div>
+    </div>
+
+
+    <!-- ======================================================
+         SECCIÓN 1 — El Peso de la Inversión
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 1: El Peso de la Inversión">
+      <div class="timeline-dot timeline-dot--orange" aria-hidden="true"></div>
+      <p class="section-number section-number--orange">Sección 01</p>
+      <h2 class="section-title">El Peso de la Inversión</h2>
+      <span class="section-tag">Contexto Económico</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <!-- Frente limpio -->
+        <div class="card-face">
+          <div class="card-face-icon icon-orange">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="20"/><path d="M24 4v20l14 8"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Costo crítico de producción</h4>
+            <p>Toca para ver el desglose de costos operativos</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Contenido revelado con sombra interior -->
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <!-- Gráfico de dona SVG -->
+              <svg viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#E8ECF1" stroke-width="16"/>
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#FF8C00" stroke-width="16"
+                  stroke-dasharray="204 123" stroke-dashoffset="82" transform="rotate(-90 70 70)"
+                  style="transition: stroke-dasharray 0.8s ease"/>
+                <circle cx="70" cy="70" r="52" fill="none" stroke="#36454F" stroke-width="16"
+                  stroke-dasharray="123 204" stroke-dashoffset="-122" transform="rotate(-90 70 70)"
+                  style="transition: stroke-dasharray 0.8s ease"/>
+                <text x="70" y="64" text-anchor="middle" font-family="'Playfair Display',serif" font-size="18" font-weight="700" fill="#FF8C00">60–70%</text>
+                <text x="70" y="80" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">Alimentación</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-orange">60 % – 70 %</p>
+              <p class="depth-desc">Del costo operativo total se destina a la dieta. La alimentación representa el factor de costo más crítico en la producción de trucha arcoíris, superando ampliamente a mano de obra, infraestructura y logística.</p>
+              <ul class="depth-legend">
+                <li><span class="legend-dot" style="background:#FF8C00"></span> Alimento balanceado</li>
+                <li><span class="legend-dot" style="background:#36454F"></span> Otros costos operativos</li>
+              </ul>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECCIÓN 2 — Perfil Biológico
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 2: Perfil Biológico">
+      <div class="timeline-dot timeline-dot--blue" aria-hidden="true"></div>
+      <p class="section-number section-number--blue">Sección 02</p>
+      <h2 class="section-title">Perfil Biológico y Demanda Nutricional</h2>
+      <span class="section-tag">Especie</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-blue">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 24c4-8 12-14 20-14s16 6 20 14c-4 8-12 14-20 14S8 32 4 24z"/><circle cx="24" cy="24" r="5"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Oncorhynchus mykiss</h4>
+            <p>Toca para ver la demanda proteica obligatoria</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 180 120">
+                <!-- Cuerpo de la trucha -->
+                <ellipse cx="80" cy="60" rx="48" ry="24" fill="rgba(0,71,171,0.08)" stroke="#0047AB" stroke-width="1.5"/>
+                <!-- Cola -->
+                <polygon points="128,60 155,38 155,82" fill="rgba(0,71,171,0.12)" stroke="#0047AB" stroke-width="1.5"/>
+                <!-- Aleta dorsal -->
+                <path d="M65 36 Q75 18 90 36" fill="none" stroke="#0047AB" stroke-width="1.2"/>
+                <!-- Ojo -->
+                <circle cx="50" cy="54" r="4" fill="#36454F"/>
+                <circle cx="49" cy="53" r="1.5" fill="#fff"/>
+                <!-- Manchas características -->
+                <circle cx="70" cy="52" r="2" fill="rgba(0,71,171,0.2)"/>
+                <circle cx="85" cy="56" r="2" fill="rgba(0,71,171,0.2)"/>
+                <circle cx="100" cy="52" r="2" fill="rgba(0,71,171,0.2)"/>
+                <circle cx="75" cy="66" r="1.8" fill="rgba(0,71,171,0.15)"/>
+                <circle cx="95" cy="68" r="1.8" fill="rgba(0,71,171,0.15)"/>
+                <!-- Etiqueta proteína -->
+                <line x1="80" y1="30" x2="80" y2="10" stroke="#FF8C00" stroke-width="1" stroke-dasharray="3 2"/>
+                <rect x="44" y="0" width="72" height="16" rx="4" fill="rgba(255,140,0,0.1)"/>
+                <text x="80" y="11" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#FF8C00">Proteína 40–50%</text>
+                <!-- Nombre científico -->
+                <text x="80" y="105" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" font-style="italic" fill="#36454F">O. mykiss</text>
+                <!-- Línea lateral -->
+                <path d="M35 60 Q80 57 125 60" fill="none" stroke="rgba(0,71,171,0.2)" stroke-width="0.8" stroke-dasharray="4 3"/>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-blue">40 % – 50 %</p>
+              <p class="depth-desc">Demanda proteica obligatoria. Especie estrictamente carnívora que requiere aminoácidos esenciales presentes en harina de pescado y subproductos animales de alta digestibilidad.</p>
+              <ul class="depth-legend">
+                <li><span class="legend-dot" style="background:#0047AB"></span> Dieta carnívora obligada</li>
+                <li><span class="legend-dot" style="background:#FF8C00"></span> Proteína base muscular</li>
+              </ul>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ———————————————— SEPARADOR TEMÁTICO ———————————————— -->
+    <div class="theme-divider" aria-hidden="true">
+      <div class="theme-divider-line"></div>
+      <span class="theme-divider-label">Ambiente y Desarrollo</span>
+      <div class="theme-divider-line" style="background:linear-gradient(to left, rgba(0,71,171,0.15), transparent)"></div>
+    </div>
+
+
+    <!-- ======================================================
+         SECCIÓN 3 — Termómetro de Crecimiento
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 3: Termómetro de Crecimiento">
+      <div class="timeline-dot timeline-dot--green" aria-hidden="true"></div>
+      <p class="section-number section-number--green">Sección 03</p>
+      <h2 class="section-title">El Termómetro de Crecimiento</h2>
+      <span class="section-tag">Ambiente</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-green">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="18" y="4" width="12" height="32" rx="6"/><line x1="18" y1="16" x2="30" y2="16"/><line x1="18" y1="24" x2="30" y2="24"/><circle cx="24" cy="42" r="5"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Rango térmico óptimo</h4>
+            <p>Toca para ver las zonas de temperatura</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 80 220">
+                <!-- Tubo -->
+                <rect x="28" y="12" width="24" height="150" rx="12" fill="#E8ECF1" stroke="#C0C8D0" stroke-width="1"/>
+                <!-- Zona roja alta (>16°C) -->
+                <rect x="30" y="14" width="20" height="35" rx="10" fill="#FF4040" opacity="0.75"/>
+                <text x="62" y="28" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#FF4040">&gt;16°C</text>
+                <text x="62" y="40" font-family="'DM Sans',sans-serif" font-size="7" fill="#FF4040">Mortalidad</text>
+                <!-- Zona amarilla (15-16°C) -->
+                <rect x="30" y="49" width="20" height="12" fill="#FFB347" opacity="0.6"/>
+                <!-- Zona verde óptima (9-14°C) -->
+                <rect x="30" y="61" width="20" height="62" fill="#50C878" opacity="0.8"/>
+                <text x="62" y="88" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#50C878">9–14°C</text>
+                <text x="62" y="100" font-family="'DM Sans',sans-serif" font-size="7" fill="#50C878">Óptimo</text>
+                <!-- Zona amarilla baja (5-8°C) -->
+                <rect x="30" y="123" width="20" height="12" fill="#FFB347" opacity="0.6"/>
+                <!-- Zona roja baja (<4°C) -->
+                <rect x="30" y="135" width="20" height="25" rx="10" fill="#FF4040" opacity="0.75"/>
+                <text x="62" y="148" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#FF4040">&lt;4°C</text>
+                <text x="62" y="160" font-family="'DM Sans',sans-serif" font-size="7" fill="#FF4040">Estrés</text>
+                <!-- Bulbo -->
+                <circle cx="40" cy="178" r="18" fill="#50C878" stroke="#C0C8D0" stroke-width="1"/>
+                <text x="40" y="182" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="12" font-weight="700" fill="#fff">OK</text>
+                <!-- Marcas de escala -->
+                <line x1="20" y1="61" x2="28" y2="61" stroke="#36454F" stroke-width="0.8"/>
+                <text x="16" y="64" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">14</text>
+                <line x1="20" y1="123" x2="28" y2="123" stroke="#36454F" stroke-width="0.8"/>
+                <text x="16" y="126" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">9</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-green">9 °C – 14 °C</p>
+              <p class="depth-desc">Rango térmico óptimo para el crecimiento. Fuera de este intervalo se compromete el oxígeno disuelto y se eleva la mortalidad. La correlación temperatura-OD es directa y crítica para la supervivencia.</p>
+              <ul class="depth-legend">
+                <li><span class="legend-dot" style="background:#50C878"></span> Zona óptima</li>
+                <li><span class="legend-dot" style="background:#FFB347"></span> Zona de precaución</li>
+                <li><span class="legend-dot" style="background:#FF4040"></span> Zona de peligro</li>
+              </ul>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECCIÓN 4 — Cronología Cuantitativa
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 4: Cronología de Desarrollo">
+      <div class="timeline-dot timeline-dot--orange" aria-hidden="true"></div>
+      <p class="section-number section-number--orange">Sección 04</p>
+      <h2 class="section-title">Cronología Cuantitativa de Desarrollo</h2>
+      <span class="section-tag">Fase Juvenil</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-orange">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 40 12 30 20 34 28 18 36 22 44 8"/><polyline points="36 8 44 8 44 16"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Evolución del peso en el tiempo</h4>
+            <p>Toca para ver la curva de crecimiento</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 200 120">
+                <defs>
+                  <linearGradient id="areaGrad4" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FF8C00" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#FF8C00" stop-opacity="0.02"/>
+                  </linearGradient>
+                </defs>
+                <!-- Ejes -->
+                <line x1="30" y1="8" x2="30" y2="95" stroke="#36454F" stroke-width="0.8"/>
+                <line x1="30" y1="95" x2="190" y2="95" stroke="#36454F" stroke-width="0.8"/>
+                <!-- Grid horizontal -->
+                <line x1="30" y1="30" x2="190" y2="30" stroke="#E8ECF1" stroke-width="0.5"/>
+                <line x1="30" y1="55" x2="190" y2="55" stroke="#E8ECF1" stroke-width="0.5"/>
+                <line x1="30" y1="75" x2="190" y2="75" stroke="#E8ECF1" stroke-width="0.5"/>
+                <!-- Área -->
+                <path d="M30 90 C55 86 75 80 100 65 S145 28 185 12 L185 95 L30 95 Z" fill="url(#areaGrad4)"/>
+                <!-- Línea -->
+                <path d="M30 90 C55 86 75 80 100 65 S145 28 185 12" fill="none" stroke="#FF8C00" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Puntos de dato -->
+                <circle cx="30" cy="90" r="3" fill="#fff" stroke="#FF8C00" stroke-width="1.5"/>
+                <circle cx="100" cy="65" r="3" fill="#fff" stroke="#FF8C00" stroke-width="1.5"/>
+                <circle cx="185" cy="12" r="4" fill="#FF8C00" stroke="#fff" stroke-width="1.5"/>
+                <!-- Etiquetas eje X -->
+                <text x="30" y="110" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">0 m</text>
+                <text x="100" y="110" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">6 m</text>
+                <text x="185" y="110" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">12 m</text>
+                <!-- Etiquetas eje Y -->
+                <text x="24" y="93" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">0 g</text>
+                <text x="24" y="33" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">200 g</text>
+                <text x="24" y="14" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">350 g</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-orange">2 – 6 veces/día</p>
+              <p class="depth-desc">Frecuencia de alimentación en la fase juvenil. El gráfico muestra el incremento de peso progresivo en función del tiempo bajo ración controlada, alcanzando los 350 g en 12 meses.</p>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ———————————————— SEPARADOR TEMÁTICO ———————————————— -->
+    <div class="theme-divider" aria-hidden="true">
+      <div class="theme-divider-line"></div>
+      <span class="theme-divider-label">Nutrición y Eficiencia</span>
+      <div class="theme-divider-line" style="background:linear-gradient(to left, rgba(0,71,171,0.15), transparent)"></div>
+    </div>
+
+
+    <!-- ======================================================
+         SECCIÓN 5 — Química de la Dieta
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 5: Química de la Dieta">
+      <div class="timeline-dot timeline-dot--orange" aria-hidden="true"></div>
+      <p class="section-number section-number--orange">Sección 05</p>
+      <h2 class="section-title">Química de la Dieta</h2>
+      <span class="section-tag">Composición</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-orange">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="20" width="6" height="22" rx="1"/><rect x="17" y="10" width="6" height="32" rx="1"/><rect x="26" y="26" width="6" height="16" rx="1"/><rect x="35" y="30" width="6" height="12" rx="1"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Desglose de la dieta balanceada</h4>
+            <p>Toca para ver la composición porcentual</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 200 130">
+                <!-- Barra apilada horizontal -->
+                <rect x="10" y="20" width="90" height="30" rx="4" fill="#0047AB" opacity="0.85"/>
+                <rect x="100" y="20" width="36" height="30" fill="#FF8C00" opacity="0.85"/>
+                <rect x="136" y="20" width="24" height="30" fill="#50C878" opacity="0.85"/>
+                <rect x="160" y="20" width="30" height="30" rx="4" fill="#36454F" opacity="0.5"/>
+                <!-- Redondear solo extremos con clip -->
+                <!-- Etiquetas dentro -->
+                <text x="55" y="39" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" font-weight="700" fill="#fff">45%</text>
+                <text x="118" y="39" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="600" fill="#fff">18%</text>
+                <text x="148" y="39" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" font-weight="600" fill="#fff">12%</text>
+                <text x="175" y="39" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" font-weight="600" fill="#fff">25%</text>
+                <!-- Leyenda -->
+                <rect x="10" y="66" width="10" height="10" rx="2" fill="#0047AB" opacity="0.85"/>
+                <text x="26" y="75" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">Proteína (base muscular)</text>
+                <rect x="10" y="84" width="10" height="10" rx="2" fill="#FF8C00" opacity="0.85"/>
+                <text x="26" y="93" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">Grasas (energía densa)</text>
+                <rect x="10" y="102" width="10" height="10" rx="2" fill="#50C878" opacity="0.85"/>
+                <text x="26" y="111" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">Vitaminas y minerales</text>
+                <rect x="120" y="102" width="10" height="10" rx="2" fill="#36454F" opacity="0.5"/>
+                <text x="136" y="111" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">Carbohidratos y otros</text>
+                <!-- Indicador 100% -->
+                <text x="190" y="60" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="8" font-weight="600" fill="#36454F">= 100%</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-orange">45 % Proteína</p>
+              <p class="depth-desc">Desglose porcentual de la dieta balanceada. Las proteínas constituyen la base para el desarrollo muscular; las grasas aportan energía densa necesaria para el metabolismo activo en aguas frías.</p>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECCIÓN 6 — Factor de Conversión Alimenticia
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 6: Factor de Conversión Alimenticia">
+      <div class="timeline-dot timeline-dot--green" aria-hidden="true"></div>
+      <p class="section-number section-number--green">Sección 06</p>
+      <h2 class="section-title">Factor de Conversión Alimenticia (FCR)</h2>
+      <span class="section-tag">Eficiencia</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-green">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 38V18l12-10 12 10v20"/><path d="M20 38v-10h8v10"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Relación alimento entregado vs. peso ganado</h4>
+            <p>Toca para ver la comparativa de eficiencia</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 180 130">
+                <!-- Ejes -->
+                <line x1="40" y1="10" x2="40" y2="100" stroke="#36454F" stroke-width="0.8"/>
+                <line x1="40" y1="100" x2="170" y2="100" stroke="#36454F" stroke-width="0.8"/>
+                <!-- Grid -->
+                <line x1="40" y1="35" x2="170" y2="35" stroke="#E8ECF1" stroke-width="0.5"/>
+                <line x1="40" y1="60" x2="170" y2="60" stroke="#E8ECF1" stroke-width="0.5"/>
+                <line x1="40" y1="85" x2="170" y2="85" stroke="#E8ECF1" stroke-width="0.5"/>
+                <!-- Barra dieta calidad (FCR 1.1) — baja = eficiente -->
+                <rect x="65" y="68" width="35" height="32" rx="3" fill="#50C878" opacity="0.8"/>
+                <text x="82" y="62" text-anchor="middle" font-family="'Playfair Display',serif" font-size="14" font-weight="700" fill="#50C878">1.1</text>
+                <text x="82" y="118" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F" font-weight="600">Calidad</text>
+                <!-- Barra dieta deficiente (FCR 2.0) — alta = ineficiente -->
+                <rect x="125" y="18" width="35" height="82" rx="3" fill="#FF4040" opacity="0.65"/>
+                <text x="142" y="14" text-anchor="middle" font-family="'Playfair Display',serif" font-size="14" font-weight="700" fill="#FF4040">2.0</text>
+                <text x="142" y="118" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F" font-weight="600">Deficiente</text>
+                <!-- Etiquetas eje Y -->
+                <text x="34" y="103" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">0</text>
+                <text x="34" y="15" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">FCR</text>
+                <!-- Indicador -->
+                <path d="M58 80 L48 80" stroke="#50C878" stroke-width="1"/>
+                <text x="46" y="78" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#50C878" font-weight="600">Mejor</text>
+                <!-- Flecha de mejora -->
+                <path d="M108 55 L115 55" stroke="#50C878" stroke-width="1" stroke-dasharray="2 2"/>
+                <text x="112" y="50" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" fill="#50C878">–45%</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-green">FCR 1.1 vs 2.0</p>
+              <p class="depth-desc">Un FCR bajo indica eficiencia: se necesita menos alimento para producir 1 kg de carne. La dieta balanceada reduce el FCR de 2.0 a 1.1, mejorando la eficiencia en casi un 45%.</p>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECCIÓN 7 — Estrategias de Alimentación
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 7: Estrategias de Alimentación">
+      <div class="timeline-dot timeline-dot--blue" aria-hidden="true"></div>
+      <p class="section-number section-number--blue">Sección 07</p>
+      <h2 class="section-title">Estrategias de Alimentación Técnica</h2>
+      <span class="section-tag">Metodología</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-blue">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="18"/><path d="M24 12v12l8 6"/><circle cx="24" cy="24" r="2" fill="currentColor"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Alimentadores automáticos y raciones ajustadas</h4>
+            <p>Toca para ver la comparativa de metodologías</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 200 120">
+                <!-- Plato controlado -->
+                <ellipse cx="55" cy="48" rx="38" ry="22" fill="rgba(80,200,120,0.08)" stroke="#50C878" stroke-width="1.5"/>
+                <text x="55" y="44" text-anchor="middle" font-family="'Playfair Display',serif" font-size="18" font-weight="700" fill="#50C878">3%</text>
+                <text x="55" y="58" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#50C878">biomasa/día</text>
+                <text x="55" y="85" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="600" fill="#36454F">Controlada</text>
+                <text x="55" y="97" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" fill="#50C878">Crecimiento uniforme</text>
+                <!-- VS -->
+                <text x="100" y="52" text-anchor="middle" font-family="'Playfair Display',serif" font-size="12" font-weight="700" fill="#36454F" opacity="0.3">VS</text>
+                <!-- Plato irregular -->
+                <ellipse cx="148" cy="48" rx="38" ry="22" fill="rgba(255,64,64,0.06)" stroke="#FF4040" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <text x="148" y="44" text-anchor="middle" font-family="'Playfair Display',serif" font-size="18" font-weight="700" fill="#FF4040">7%</text>
+                <text x="148" y="58" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#FF4040">biomasa/día</text>
+                <text x="148" y="85" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="600" fill="#36454F">Irregular</text>
+                <text x="148" y="97" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" fill="#FF4040">+40% desperdicio</text>
+                <!-- Indicador de ahorro -->
+                <rect x="60" y="105" width="80" height="14" rx="7" fill="rgba(80,200,120,0.1)"/>
+                <text x="100" y="115" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" font-weight="600" fill="#50C878">Ahorro: –57% alimento</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-blue">3 % Biomasa/día</p>
+              <p class="depth-desc">Con alimentadores automáticos y raciones ajustadas al 3% de la biomasa corporal se minimiza el desperdicio, se estandariza el crecimiento y se reduce la contaminación del agua por exceso de nutrientes.</p>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ———————————————— SEPARADOR TEMÁTICO ———————————————— -->
+    <div class="theme-divider" aria-hidden="true">
+      <div class="theme-divider-line"></div>
+      <span class="theme-divider-label">Análisis y Conclusión</span>
+      <div class="theme-divider-line" style="background:linear-gradient(to left, rgba(0,71,171,0.15), transparent)"></div>
+    </div>
+
+
+    <!-- ======================================================
+         SECCIÓN 8 — Análisis Comparativo de Insumos
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 8: Análisis Comparativo de Insumos">
+      <div class="timeline-dot timeline-dot--orange" aria-hidden="true"></div>
+      <p class="section-number section-number--orange">Sección 08</p>
+      <h2 class="section-title">Análisis Comparativo de Insumos</h2>
+      <span class="section-tag">Costo-Beneficio</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-orange">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="32" rx="2"/><rect x="28" y="8" width="16" height="32" rx="2"/><path d="M12 16v4m0 4v4m0 4v4"/><path d="M36 16v4m0 4v4m0 4v4"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Dieta animal vs. dieta vegetal</h4>
+            <p>Toca para ver la tabla comparativa completa</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-info" style="width:100%">
+            <p class="depth-stat stat-orange">+35 % Rentabilidad</p>
+            <p class="depth-desc">Comparativa directa entre dietas de origen animal y vegetal en cuatro criterios clave de producción:</p>
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th>Criterio</th>
+                  <th>Dieta Animal</th>
+                  <th>Dieta Vegetal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Crecimiento</td>
+                  <td class="val-pos">Optimo</td>
+                  <td class="val-neg">Lento</td>
+                </tr>
+                <tr>
+                  <td>Costo unitario</td>
+                  <td class="val-neg">Alto</td>
+                  <td class="val-pos">Bajo</td>
+                </tr>
+                <tr>
+                  <td>Rentabilidad a largo plazo</td>
+                  <td class="val-pos">+35 %</td>
+                  <td class="val-neg">–12 %</td>
+                </tr>
+                <tr>
+                  <td>Impacto ambiental</td>
+                  <td class="val-neg">Moderado</td>
+                  <td class="val-pos">Bajo</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="table-note">La dieta de origen animal ofrece mejor crecimiento pero a mayor costo; la vegetal es más económica pero reduce la rentabilidad neta a largo plazo.</p>
+            <button class="depth-close" aria-label="Cerrar sección">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECCIÓN 9 — Riesgos y Sostenibilidad
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 9: Riesgos y Sostenibilidad">
+      <div class="timeline-dot timeline-dot--red" aria-hidden="true"></div>
+      <p class="section-number section-number--red">Sección 09</p>
+      <h2 class="section-title">Riesgos y Sostenibilidad Ambiental</h2>
+      <span class="section-tag">Impacto</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-red">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4L4 40h40L24 4z"/><line x1="24" y1="18" x2="24" y2="28"/><circle cx="24" cy="34" r="1.5" fill="currentColor"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Sobrealimentación y contaminación</h4>
+            <p>Toca para ver el mapa de impactos</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 200 140">
+                <!-- Círculo central -->
+                <circle cx="100" cy="55" r="32" fill="rgba(255,64,64,0.06)" stroke="#FF4040" stroke-width="1.5"/>
+                <text x="100" y="50" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#FF4040">Sobrecarga</text>
+                <text x="100" y="63" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#FF4040">nutricional</text>
+                <!-- Conector superior izquierdo: Eutrofización -->
+                <line x1="72" y1="42" x2="38" y2="22" stroke="#FF4040" stroke-width="1" stroke-dasharray="3 2"/>
+                <circle cx="30" cy="18" r="26" fill="rgba(255,64,64,0.04)" stroke="#FF4040" stroke-width="1" stroke-dasharray="3 2"/>
+                <text x="30" y="14" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" font-weight="600" fill="#FF4040">Eutrofización</text>
+                <text x="30" y="24" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">+N y P en agua</text>
+                <!-- Conector superior derecho: Pérdida económica -->
+                <line x1="128" y1="42" x2="162" y2="22" stroke="#FF4040" stroke-width="1" stroke-dasharray="3 2"/>
+                <circle cx="170" cy="18" r="26" fill="rgba(255,64,64,0.04)" stroke="#FF4040" stroke-width="1" stroke-dasharray="3 2"/>
+                <text x="170" y="14" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" font-weight="600" fill="#FF4040">Pérdida econ.</text>
+                <text x="170" y="24" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">–15% margen</text>
+                <!-- Conector inferior: Daño ecosistema -->
+                <line x1="100" y1="87" x2="100" y2="100" stroke="#36454F" stroke-width="1" stroke-dasharray="3 2"/>
+                <rect x="56" y="102" width="88" height="28" rx="6" fill="rgba(54,69,79,0.04)" stroke="#36454F" stroke-width="0.8"/>
+                <text x="100" y="116" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" font-weight="600" fill="#36454F">Daño al ecosistema</text>
+                <text x="100" y="126" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">Pérdida de biodiversidad acuática</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-red">–15 % Margen neto</p>
+              <p class="depth-desc">La sobrealimentación incrementa los niveles de nitrógeno y fósforo no absorbidos, provocando eutrofización del cuerpo de agua. El impacto económico directo se estima en un 15% del margen neto, sin contar costos de remediación ambiental.</p>
+              <ul class="depth-legend">
+                <li><span class="legend-dot" style="background:#FF4040"></span> Riesgo directo</li>
+                <li><span class="legend-dot" style="background:#36454F"></span> Impacto derivado</li>
+              </ul>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECCIÓN 10 — Rentabilidad Sostenible
+         ====================================================== -->
+    <section class="section-block" aria-label="Sección 10: Rentabilidad Sostenible">
+      <div class="timeline-dot timeline-dot--green" aria-hidden="true"></div>
+      <p class="section-number section-number--green">Sección 10</p>
+      <h2 class="section-title">Resultado Final: Rentabilidad Sostenible</h2>
+      <span class="section-tag">Conclusión</span>
+
+      <div class="section-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-face">
+          <div class="card-face-icon icon-green">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 40 L14 28 L22 34 L32 18 L44 4"/><polyline points="34 4 44 4 44 14"/></svg>
+          </div>
+          <div class="card-face-text">
+            <h4>Proyección bajo estrategias óptimas</h4>
+            <p>Toca para ver la curva de rentabilidad</p>
+          </div>
+          <div class="card-face-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="card-depth">
+          <div class="depth-layout">
+            <div class="depth-visual">
+              <svg viewBox="0 0 200 130">
+                <defs>
+                  <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#50C878" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#50C878" stop-opacity="0.02"/>
+                  </linearGradient>
+                </defs>
+                <!-- Ejes -->
+                <line x1="30" y1="8" x2="30" y2="105" stroke="#36454F" stroke-width="0.8"/>
+                <line x1="30" y1="105" x2="185" y2="105" stroke="#36454F" stroke-width="0.8"/>
+                <!-- Grid -->
+                <line x1="30" y1="30" x2="185" y2="30" stroke="#E8ECF1" stroke-width="0.5"/>
+                <line x1="30" y1="55" x2="185" y2="55" stroke="#E8ECF1" stroke-width="0.5"/>
+                <line x1="30" y1="80" x2="185" y2="80" stroke="#E8ECF1" stroke-width="0.5"/>
+                <!-- Área bajo curva -->
+                <path d="M30 98 C50 94 70 86 95 68 S140 30 178 14 L178 105 L30 105 Z" fill="url(#profitGrad)"/>
+                <!-- Curva de rentabilidad -->
+                <path d="M30 98 C50 94 70 86 95 68 S140 30 178 14" fill="none" stroke="#50C878" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Punto final con símbolo de moneda -->
+                <circle cx="178" cy="14" r="14" fill="#50C878"/>
+                <text x="178" y="19" text-anchor="middle" font-family="'Playfair Display',serif" font-size="14" font-weight="700" fill="#fff">$</text>
+                <!-- Etiqueta peso final -->
+                <rect x="130" y="24" width="55" height="18" rx="4" fill="rgba(80,200,120,0.1)"/>
+                <text x="157" y="37" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" font-weight="700" fill="#50C878">350 g</text>
+                <!-- Eje X -->
+                <text x="30" y="120" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">Inicio</text>
+                <text x="95" y="120" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">6 m</text>
+                <text x="178" y="120" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#36454F">12 m</text>
+                <!-- Eje Y -->
+                <text x="24" y="108" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">0</text>
+                <text x="24" y="18" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="7" fill="#36454F">Rent.</text>
+              </svg>
+            </div>
+            <div class="depth-info">
+              <p class="depth-stat stat-green">350 g en 12 meses</p>
+              <p class="depth-desc">La sinergia entre nutrición balanceada, control térmico y alimentación técnica maximiza la productividad, alcanzando el peso comercial óptimo con la mayor rentabilidad sostenible y el menor impacto ambiental.</p>
+              <ul class="depth-legend">
+                <li><span class="legend-dot" style="background:#50C878"></span> Curva de rentabilidad proyectada</li>
+                <li><span class="legend-dot" style="background:#FF8C00"></span> Punto de peso comercial</li>
+              </ul>
+              <button class="depth-close" aria-label="Cerrar sección">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================
+       PIE DE PÁGINA
+       ====================================================== -->
+  <footer class="infographic-footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-source">
+        Fuente: Medina.E (2026). TruchasArcoiris. Revista, vol(num), pp.
+        <a href="https://doi.org/xxxxx" target="_blank" rel="noopener noreferrer">https://doi.org/xxxxx</a>
+      </p>
+      <p class="footer-author">Diseñado por: <strong>Erika Koraima Medina Arroyo</strong></p>
+      <div class="footer-line" aria-hidden="true"></div>
+    </div>
+  </footer>
+
+
+  <!-- ======================================================
+       JAVASCRIPT — Sin dependencias externas
+       Se carga con defer para no bloquear el renderizado.
+       ====================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ——————————————————————————————
+         1. ANIMACIONES AL HACER SCROLL
+         (IntersectionObserver)
+         —————————————————————————————— */
+      var sectionBlocks = document.querySelectorAll('.section-block');
+
+      // Verificar soporte de IntersectionObserver
+      if ('IntersectionObserver' in window) {
+        var observerOptions = {
+          root: null,
+          rootMargin: '0px 0px -60px 0px',
+          threshold: 0.15
+        };
+
+        var sectionObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              // Dejar de observar una vez visible (optimización)
+              sectionObserver.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        sectionBlocks.forEach(function (block) {
+          sectionObserver.observe(block);
+        });
+      } else {
+        // Fallback: mostrar todo si no hay soporte
+        sectionBlocks.forEach(function (block) {
+          block.classList.add('visible');
+        });
+      }
+
+
+      /* ——————————————————————————————
+         2. TOGGLE DE TARJETAS (clic/touch)
+         —————————————————————————————— */
+      var sectionCards = document.querySelectorAll('.section-card');
+
+      function openCard(card) {
+        // Cerrar cualquier otra tarjeta abierta
+        sectionCards.forEach(function (c) {
+          if (c !== card) {
+            c.classList.remove('open');
+            c.setAttribute('aria-expanded', 'false');
+            // Reactivar el frente
+            var otherFace = c.querySelector('.card-face');
+            if (otherFace) {
+              otherFace.style.position = '';
+            }
+          }
+        });
+
+        card.classList.add('open');
+        card.setAttribute('aria-expanded', 'true');
+        // Marcar el bloque padre como activo (para el punto de la timeline)
+        card.closest('.section-block').classList.add('active');
+      }
+
+      function closeCard(card) {
+        card.classList.remove('open');
+        card.setAttribute('aria-expanded', 'false');
+        card.closest('.section-block').classList.remove('active');
+      }
+
+      sectionCards.forEach(function (card) {
+        // Clic en la tarjeta
+        card.addEventListener('click', function (e) {
+          // Si el clic fue en el botón "Cerrar", cerrar
+          if (e.target.closest('.depth-close')) {
+            e.stopPropagation();
+            closeCard(card);
+            return;
+          }
+          // Si ya está abierta, cerrarla
+          if (card.classList.contains('open')) {
+            closeCard(card);
+          } else {
+            openCard(card);
+          }
+        });
+
+        // Soporte de teclado
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (card.classList.contains('open')) {
+              closeCard(card);
+            } else {
+              openCard(card);
+            }
+          }
+          // Cerrar con Escape
+          if (e.key === 'Escape' && card.classList.contains('open')) {
+            closeCard(card);
+          }
+        });
+      });
+
+
+      /* ——————————————————————————————
+         3. CERRAR TARJETAS AL CLIC FUERA
+         —————————————————————————————— */
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.section-card')) {
+          sectionCards.forEach(function (card) {
+            closeCard(card);
+          });
+        }
+      });
+
+
+      /* ——————————————————————————————
+         4. PREPARACIÓN PARA DATOS EXTERNOS
+         —————————————————————————————— */
+      //
+      // Si los datos provienen de un archivo JSON externo,
+      // colócalo en la ruta: data/datos-trucha.json
+      // y descomenta la función a continuación.
+      //
+      // Formato esperado:
+      // {
+      //   "secciones": [
+      //     { "id": 1, "dato": "60-70%", "descripcion": "...", "grafico": { ... } },
+      //     ...
+      //   ]
+      // }
+      //
+      // async function cargarDatosExternos() {
+      //   try {
+      //     const response = await fetch('data/datos-trucha.json');
+      //     if (!response.ok) throw new Error(response.status);
+      //     const data = await response.json();
+      //
+      //     // Ejemplo: actualizar dato destacado de cada sección
+      //     data.secciones.forEach(function(seccion) {
+      //       const block = document.querySelector('[aria-label="Sección ' + seccion.id + '"]');
+      //       if (block) {
+      //         const stat = block.querySelector('.depth-stat');
+      //         if (stat) stat.textContent = seccion.dato;
+      //         const desc = block.querySelector('.depth-desc');
+      //         if (desc) desc.textContent = seccion.descripcion;
+      //       }
+      //     });
+      //
+      //     console.log('Datos externos cargados:', data);
+      //   } catch (err) {
+      //     console.warn('Datos externos no disponibles:', err.message);
+      //   }
+      // }
+      //
+      // document.addEventListener('DOMContentLoaded', cargarDatosExternos);
+
+
+      /* ——————————————————————————————
+         5. LOG DE INICIALIZACIÓN
+         —————————————————————————————— */
+      console.log(
+        '%c Infografía Trucha Arcoíris — Lista ',
+        'background:#0047AB;color:#fff;padding:4px 14px;border-radius:4px;font-weight:600;'
+      );
+      console.log('Secciones:', sectionBlocks.length, '| Tarjetas:', sectionCards.length);
+
+    })();
+  </script>
+
+</body>
+</html>
